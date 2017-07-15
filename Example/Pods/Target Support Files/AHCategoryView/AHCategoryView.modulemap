@@ -1,0 +1,6 @@
+framework module AHCategoryView {
+  umbrella header "AHCategoryView-umbrella.h"
+
+  export *
+  module * { export * }
+}
