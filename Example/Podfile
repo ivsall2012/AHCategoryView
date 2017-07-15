@@ -1,0 +1,11 @@
+use_frameworks!
+
+target 'AHCategoryView_Example' do
+  pod 'AHCategoryView', :path => '../'
+
+  target 'AHCategoryView_Tests' do
+    inherit! :search_paths
+
+    
+  end
+end
