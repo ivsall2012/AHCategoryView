@@ -99,7 +99,8 @@ private extension AHCategoryNavBar {
             let y: CGFloat = 0.0
             var width: CGFloat = 0.0
             let height = self.labelHeight
-            let textWidth: CGFloat = getTextWidth(for: label)
+//            let textWidth: CGFloat = getTextWidth(for: label)
+            let textWidth: CGFloat = label.intrinsicContentSize.width
             
             
             if barStyle.isScrollabel {
@@ -307,14 +308,14 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
         let fromLabel = labels[fromIndex]
         let toLabel = labels[toIndex]
         
-        let fromTextWidth = getTextWidth(for: fromLabel)
-        let toTextWidth = getTextWidth(for: toLabel)
+        let fromWidth = fromLabel.intrinsicContentSize.width
+        let toWidth = toLabel.intrinsicContentSize.width
         
-        let deltaX = toLabel.frame.origin.x - fromLabel.frame.origin.x
-        let deltaWidth = toTextWidth - fromTextWidth
+        let deltaX = (toLabel.center.x - fromLabel.center.x) * progress
+        let deltaWidth = toWidth - fromWidth
         
-        indicator.frame.origin.x = fromLabel.frame.origin.x + deltaX * progress
-        indicator.frame.size.width = fromTextWidth + deltaWidth * progress
+        indicator.center.x = fromLabel.center.x + deltaX
+        indicator.frame.size.width = fromWidth + deltaWidth * progress
         
     }
     
@@ -348,12 +349,13 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
         }
         let fromLabel = labels[fromIndex]
         let toLabel = labels[toIndex]
+        let fromWidth = fromLabel.intrinsicContentSize.width
+        let toWidth = toLabel.intrinsicContentSize.width
         
-        
-        let deltaWidth = (toLabel.frame.size.width - fromLabel.frame.size.width) * progress
+        let deltaWidth = (toWidth - fromWidth) * progress
         let deltaX = (toLabel.center.x - fromLabel.center.x) * progress
 
-        let width = fromLabel.frame.size.width + deltaWidth + 2 * edgeMargin
+        let width = fromWidth + deltaWidth + 2 * edgeMargin
         let x = fromLabel.center.x + deltaX
        
         self.bgMaskView.frame.size.width = width
