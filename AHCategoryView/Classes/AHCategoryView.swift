@@ -30,7 +30,7 @@ public protocol AHCategoryContainerDelegate: class {
 
 
 open class AHCategoryView: UIView {
-    fileprivate var categories: [String]
+    fileprivate var categories: [AHCategoryItem]
     fileprivate var childVCs: [UIViewController]
     fileprivate weak var parentVC: UIViewController!
     fileprivate var barStyle: AHCategoryNavBarStyle
@@ -38,7 +38,7 @@ open class AHCategoryView: UIView {
     fileprivate(set) var navBar: AHCategoryNavBar!
     fileprivate(set) var containerView: AHPageContainerView!
     
-    public init(frame: CGRect, categories: [String], childVCs: [UIViewController], parentVC: UIViewController, barStyle: AHCategoryNavBarStyle) {
+    public init(frame: CGRect, categories: [AHCategoryItem], childVCs: [UIViewController], parentVC: UIViewController, barStyle: AHCategoryNavBarStyle) {
         self.categories = categories
         self.childVCs = childVCs
         self.parentVC = parentVC

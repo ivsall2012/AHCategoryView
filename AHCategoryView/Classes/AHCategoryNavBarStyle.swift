@@ -17,6 +17,7 @@ public struct AHCategoryNavBarStyle {
     public var selectedFontSize: CGFloat = 17.0
     public var showTransitionAnimation = true
     public var showBarSelectionAnimation = true
+    public var defaultCategoryIndex: Int = 0
     /// use RGB channels!!!
     public var normalColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
     /// use RGB channels!!!
@@ -38,3 +39,22 @@ public struct AHCategoryNavBarStyle {
     public init() {}
     
 }
+
+
+public struct AHCategoryItem {
+    public var title: String?
+    public var normalImage: UIImage?
+    public var selectedImage: UIImage?
+    public init() {}
+}
+
+
+
+
+
+
+
+
+
+
+

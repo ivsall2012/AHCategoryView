@@ -15,19 +15,17 @@ open class AHCategoryNavBar: UIView {
     
     fileprivate var barStyle: AHCategoryNavBarStyle
     
-    fileprivate var categories: [String]
+    fileprivate var categories: [AHCategoryItem]
     
-    fileprivate lazy var labels = [UILabel]()
+    fileprivate lazy var buttons = [UIButton]()
     
     fileprivate lazy var scrollView: UIScrollView = UIScrollView(frame: self.bounds)
     
-    fileprivate var currentLabelTag: Int = 0
+    fileprivate var currentButtonTag: Int = 0
     
-    fileprivate lazy var labelHeight: CGFloat = self.bounds.height
+    fileprivate lazy var buttonHeight: CGFloat = self.bounds.height
     
-    fileprivate lazy var labelFont: UIFont = UIFont.systemFont(ofSize: self.barStyle.fontSize)
-    
-    fileprivate lazy var labelSelectedFont: UIFont = UIFont.systemFont(ofSize: self.barStyle.selectedFontSize)
+    fileprivate lazy var buttonFont: UIFont = UIFont.systemFont(ofSize: self.barStyle.fontSize)
     
     fileprivate lazy var indicator: UIView = {
         let view = UIView()
@@ -50,7 +48,7 @@ open class AHCategoryNavBar: UIView {
     }()
     
     
-    public init(frame: CGRect, categories: [String], barStyle: AHCategoryNavBarStyle) {
+    public init(frame: CGRect, categories: [AHCategoryItem], barStyle: AHCategoryNavBarStyle) {
         self.categories = categories
         self.barStyle = barStyle
     
@@ -69,12 +67,10 @@ open class AHCategoryNavBar: UIView {
 private extension AHCategoryNavBar {
     func setupUI() {
         setupScrollView()
-        addLabels()
+        addButtons()
         setupIndicator()
         setupBgMaskView()
-        
-        
-        
+
     }
     
     func setupScrollView(){
@@ -86,57 +82,59 @@ private extension AHCategoryNavBar {
     }
     
     
-    func addLabels() {
+    func addButtons() {
         for i in 0..<categories.count {
-            let label = UILabel()
-            label.text = categories[i]
-            label.textColor = (i == 0) ? barStyle.selectedColor : barStyle.normalColor
-            label.tag = i
+            let btn = UIButton()
+            let item = categories[i]
+            if let itemTitle = item.title {
+                btn.setTitle(itemTitle, for: .normal)
+                let titleColor = (i == barStyle.defaultCategoryIndex) ? barStyle.selectedColor : barStyle.normalColor
+                btn.setTitleColor(titleColor, for: .normal)
+                btn.titleLabel?.textAlignment = .center
+                btn.titleLabel?.font = buttonFont
+            }
             
-            label.font = labelFont
+            btn.tag = i
+            btn.isHighlighted = false
             
             var x: CGFloat = 0.0
             let y: CGFloat = 0.0
             var width: CGFloat = 0.0
-            let height = self.labelHeight
+            let height = self.buttonHeight
 //            let textWidth: CGFloat = getTextWidth(for: label)
-            let textWidth: CGFloat = label.intrinsicContentSize.width
+            let textWidth: CGFloat = btn.intrinsicContentSize.width
             
             
             if barStyle.isScrollabel {
                 // scrollabel, each label has its own width according to its text
                 width = textWidth
                 if i > 0 {
-                    let previousLabel = labels[i - 1]
-                    x = previousLabel.frame.maxX + barStyle.interItemSpace
+                    let previousBtn = buttons[i - 1]
+                    x = previousBtn.frame.maxX + barStyle.interItemSpace
                 }
             }else{
                 // not scrollabel, then divide width equally for all labels
                 width = self.bounds.width / CGFloat(categories.count)
-                label.textAlignment = .center
                 
                 if i > 0 {
                     x = width * CGFloat(i)
                 }
             }
             
-            // special treatment for the first label
-            if i == 0 {
+            // special adjustment for the default button
+            if i == barStyle.defaultCategoryIndex {
                 x = barStyle.interItemSpace * 0.5
             }
             
             
             
-            label.frame = CGRect(x: x, y: y, width: width, height: height)
-            labels.append(label)
+            btn.frame = CGRect(x: x, y: y, width: width, height: height)
+            btn.addTarget(self, action: #selector(titleBtnTapped(_:)), for: .touchUpInside)
+            buttons.append(btn)
             
-            let tapGesture = UITapGestureRecognizer(target: self, action: #selector(labelTapped(_:)))
-            label.addGestureRecognizer(tapGesture)
-            label.isUserInteractionEnabled = true
-            
-            scrollView.addSubview(label)
+            scrollView.addSubview(btn)
 
-            let contentWidth:CGFloat = labels.last!.frame.maxX + barStyle.interItemSpace * 0.5
+            let contentWidth:CGFloat = buttons.last!.frame.maxX + barStyle.interItemSpace * 0.5
             let contentHeight:CGFloat = self.bounds.height
             scrollView.contentSize = CGSize(width: contentWidth, height: contentHeight)
             
@@ -147,22 +145,22 @@ private extension AHCategoryNavBar {
         guard barStyle.showIndicator else {
             return
         }
-        let firstLabel = labels[0]
-        let textWidth: CGFloat = getTextWidth(for: firstLabel)
-        indicator.frame.size.width = textWidth
-        indicator.center.x = firstLabel.center.x
+        let defaultBtn = buttons[0]
+        let width: CGFloat = defaultBtn.intrinsicContentSize.width
+        indicator.frame.size.width = width
+        indicator.center.x = defaultBtn.center.x
     }
     
     func setupBgMaskView() {
         guard barStyle.showbgMasView else {
             return
         }
-        let firstLabel = labels[0]
-        let textWidth: CGFloat = getTextWidth(for: firstLabel)
+        let defaultBtn = buttons[0]
+        let width: CGFloat = defaultBtn.intrinsicContentSize.width
         
-        bgMaskView.frame.size.width = textWidth + 2 * edgeMargin
+        bgMaskView.frame.size.width = width + 2 * edgeMargin
         bgMaskView.frame.size.height = barStyle.fontSize + 2 * edgeMargin
-        bgMaskView.center.x = firstLabel.center.x
+        bgMaskView.center.x = defaultBtn.center.x
         bgMaskView.frame.origin.y = (self.bounds.height - bgMaskView.frame.size.height) * 0.5 + 1.0 // the 1.0 is just a little adjustment
     }
     
@@ -183,77 +181,73 @@ private extension AHCategoryNavBar {
 
 //MARK:- Event Handling
 private extension AHCategoryNavBar {
-    @objc func labelTapped(_ gesture: UITapGestureRecognizer) {
-        guard let currentLabel = gesture.view as? UILabel else {
+    @objc func titleBtnTapped(_ btn: UIButton) {
+        guard btn.tag != currentButtonTag else {
             return
         }
+        delegate?.categoryNavBar(self, willSwitchIndexFrom: currentButtonTag, to: btn.tag)
         
-        guard currentLabel.tag != currentLabelTag else {
-            return
-        }
-        delegate?.categoryNavBar(self, willSwitchIndexFrom: currentLabelTag, to: currentLabel.tag)
-        
-        handleLabelSwitching(currentLabel: currentLabel)
-        handleIndicator(currentLabel: currentLabel)
-        handleBgMaskView(currentLabel: currentLabel)
-        delegate?.categoryNavBar(self, didSwitchIndexTo: currentLabel.tag)
+        handleBtnSwitching(currentBtn: btn)
+        handleIndicator(currentBtn: btn)
+        handleBgMaskView(currentBtn: btn)
+        delegate?.categoryNavBar(self, didSwitchIndexTo: btn.tag)
     }
     
-    func handleLabelSwitching(currentLabel: UILabel) {
+    func handleBtnSwitching(currentBtn: UIButton) {
         
-        let previousLabel = labels[currentLabelTag]
+        let previousBtn = buttons[currentButtonTag]
         
-        previousLabel.textColor = barStyle.normalColor
-        currentLabel.textColor = barStyle.selectedColor
-        currentLabelTag = currentLabel.tag
+        previousBtn.setTitleColor(barStyle.normalColor, for: .normal)
+        currentBtn.setTitleColor(barStyle.selectedColor, for: .normal)
+        currentButtonTag = currentBtn.tag
         
         if barStyle.isScrollabel {
-            scrollToCenter(currentLabel: currentLabel)
+            scrollToCenter(currentBtn: currentBtn)
         }
         
     }
     
-    func handleIndicator(currentLabel: UILabel) {
+    func handleIndicator(currentBtn: UIButton) {
         guard barStyle.showIndicator else {
             return
         }
         
-        let textWidth = getTextWidth(for: currentLabel)
+        let width = currentBtn.intrinsicContentSize.width
         if barStyle.showBarSelectionAnimation {
             UIView.animate(withDuration: 0.25) {
-                self.indicator.frame.size.width = textWidth
-                self.indicator.center.x = currentLabel.center.x
+                self.indicator.frame.size.width = width
+                self.indicator.center.x = currentBtn.center.x
             }
         }else{
-            self.indicator.frame.size.width = textWidth
-            self.indicator.center.x = currentLabel.center.x
+            self.indicator.frame.size.width = width
+            self.indicator.center.x = currentBtn.center.x
         }
         
     }
     
-    func handleBgMaskView(currentLabel: UILabel) {
+    func handleBgMaskView(currentBtn: UIButton) {
         guard barStyle.showbgMasView else {
             return
         }
-        let textWidth = getTextWidth(for: currentLabel)
+        let width = currentBtn.intrinsicContentSize.width
         if barStyle.showBarSelectionAnimation {
             UIView.animate(withDuration: 0.25) {
-                self.bgMaskView.frame.size.width = textWidth + 2 * edgeMargin
-                self.bgMaskView.center.x = currentLabel.center.x
+                self.bgMaskView.frame.size.width = width + 2 * edgeMargin
+                self.bgMaskView.center.x = currentBtn.center.x
             }
         }else{
-            self.bgMaskView.frame.size.width = textWidth + 2 * edgeMargin
-            self.bgMaskView.center.x = currentLabel.center.x
+            self.bgMaskView.frame.size.width = width + 2 * edgeMargin
+            self.bgMaskView.center.x = currentBtn.center.x
         }
         
     }
     
-    func scrollToCenter(currentLabel: UILabel) {
+    func scrollToCenter(currentBtn: UIButton) {
         guard barStyle.isScrollabel else {
             return
         }
         
-        var centerX = currentLabel.center.x - scrollView.bounds.width * 0.5
+        var centerX = currentBtn.center.x - scrollView.bounds.width * 0.5
         if centerX < 0.0 {
             // for labels positioned on the left side of scrollView.bounds.width * 0.5
             centerX = 0.0
@@ -274,24 +268,24 @@ private extension AHCategoryNavBar {
 
 extension AHCategoryNavBar: AHCategoryContainerDelegate {
     public func categoryContainer(_ container: UIView, didSwitchIndexTo toIndex: Int) {
-        guard toIndex < labels.count else {
+        guard toIndex < buttons.count else {
             return
         }
 
-        let currentLabel = labels[toIndex]
-        handleLabelSwitching(currentLabel: currentLabel)
-        handleIndicator(currentLabel: currentLabel)
-        handleBgMaskView(currentLabel: currentLabel)
+        let currentBtn = buttons[toIndex]
+        handleBtnSwitching(currentBtn: currentBtn)
+        handleIndicator(currentBtn: currentBtn)
+        handleBgMaskView(currentBtn: currentBtn)
     }
     
      public func categoryContainer(_ container: UIView, transitioningFromIndex fromIndex:Int, toIndex:Int, progress: CGFloat) {
         guard barStyle.showTransitionAnimation else {
             return
         }
-        guard fromIndex >= 0, fromIndex < labels.count else {
+        guard fromIndex >= 0, fromIndex < buttons.count else {
             return
         }
-        guard toIndex >= 0, toIndex < labels.count else {
+        guard toIndex >= 0, toIndex < buttons.count else {
             return
         }
         
@@ -305,23 +299,23 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
             return
         }
         
-        let fromLabel = labels[fromIndex]
-        let toLabel = labels[toIndex]
+        let fromBtn = buttons[fromIndex]
+        let toBtn = buttons[toIndex]
         
-        let fromWidth = fromLabel.intrinsicContentSize.width
-        let toWidth = toLabel.intrinsicContentSize.width
+        let fromWidth = fromBtn.intrinsicContentSize.width
+        let toWidth = toBtn.intrinsicContentSize.width
         
-        let deltaX = (toLabel.center.x - fromLabel.center.x) * progress
+        let deltaX = (toBtn.center.x - fromBtn.center.x) * progress
         let deltaWidth = toWidth - fromWidth
         
-        indicator.center.x = fromLabel.center.x + deltaX
+        indicator.center.x = fromBtn.center.x + deltaX
         indicator.frame.size.width = fromWidth + deltaWidth * progress
         
     }
     
     func makeColorTransition(fromIndex: Int, toIndex: Int, progress: CGFloat){
-        let fromLabel = labels[fromIndex]
-        let toLabel = labels[toIndex]
+        let fromBtn = buttons[fromIndex]
+        let toBtn = buttons[toIndex]
         
         let colorDifferences = UIColor.getRGBDelta(first: barStyle.selectedColor, second: barStyle.normalColor)
         
@@ -339,24 +333,24 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
         let toBlue = barStyle.normalColor.getRGBComponents().2 + blueDiff
         let toColor = UIColor(red: toRed, green: toGreen, blue: toBlue, alpha: 1.0)
         
-        fromLabel.textColor = fromColor
-        toLabel.textColor = toColor
+        fromBtn.setTitleColor(fromColor, for: .normal)
+        toBtn.setTitleColor(toColor, for: .normal)
     }
     
     func makeBgMaskViewTransition(fromIndex: Int, toIndex: Int, progress: CGFloat) {
         guard barStyle.showbgMasView else {
             return
         }
-        let fromLabel = labels[fromIndex]
-        let toLabel = labels[toIndex]
-        let fromWidth = fromLabel.intrinsicContentSize.width
-        let toWidth = toLabel.intrinsicContentSize.width
+        let fromBtn = buttons[fromIndex]
+        let toBtn = buttons[toIndex]
+        let fromWidth = fromBtn.intrinsicContentSize.width
+        let toWidth = toBtn.intrinsicContentSize.width
         
         let deltaWidth = (toWidth - fromWidth) * progress
-        let deltaX = (toLabel.center.x - fromLabel.center.x) * progress
+        let deltaX = (toBtn.center.x - fromBtn.center.x) * progress
 
         let width = fromWidth + deltaWidth + 2 * edgeMargin
-        let x = fromLabel.center.x + deltaX
+        let x = fromBtn.center.x + deltaX
        
         self.bgMaskView.frame.size.width = width
         self.bgMaskView.center.x = x

@@ -9,11 +9,11 @@
 import UIKit
 import AHCategoryView
 class ViewController: UIViewController {
-    let categories = ["Me","Featured", "Charts", "Live", "Radio"]
+    let categoryTitles = ["Me","Featured", "Charts", "Live", "Radio"]
     override func viewDidLoad() {
         super.viewDidLoad()
         var childVCs = [UIViewController]()
-        for _ in 0..<categories.count {
+        for _ in 0..<categoryTitles.count {
             let vc = UIViewController()
             vc.view.backgroundColor = UIColor.random()
             childVCs.append(vc)
@@ -27,9 +27,18 @@ class ViewController: UIViewController {
         style.showbgMasView = true
         style.showTransitionAnimation = true
         let frame = CGRect(x: 0, y: 64, width: view.bounds.width, height: view.bounds.height - 64)
-        let categoryView = AHCategoryView(frame: frame, categories: categories, childVCs: childVCs, parentVC: self, barStyle: style)
+        
+        
+        var categoryItems = [AHCategoryItem]()
+        categoryTitles.forEach { (titel) in
+            var item = AHCategoryItem()
+            item.title = titel
+            categoryItems.append(item)
+        }
+        let categoryView = AHCategoryView(frame: frame, categories: categoryItems, childVCs: childVCs, parentVC: self, barStyle: style)
         
         view.addSubview(categoryView)
+        
     }
 
 

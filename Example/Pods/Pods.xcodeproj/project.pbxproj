@@ -16,6 +16,7 @@
 		6D9536F762ED3152F6C0F55DDF3B79C8 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		71752DEEDC733C51078A4522F2435F4C /* AHCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CF63AE3305CFE267A10293F9F55C95AB /* AHCategoryView.swift */; };
 		8B2A45B65A1393ED03D0B1A9EB99DE85 /* Pods-AHCategoryView_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4A49A8066D2329919CD6B2D5F6D6A2B5 /* Pods-AHCategoryView_Example-dummy.m */; };
+		A1B932AC1F1AC3C10065AAEB /* AHStackButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B932AB1F1AC3C10065AAEB /* AHStackButton.swift */; };
 		B130399D411AB5C6FB21AEDACFF9718B /* AHCategoryNavBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1374546D64722517CFC0FD7B2324782 /* AHCategoryNavBarStyle.swift */; };
 		B164EA4C4F3856CC77DC52BA69D3F3FC /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
 		D9689591BBE33D5E6FE16B4E08233EB4 /* AHCategoryView-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = E87B39CE83744A23C25638B1E29E9487 /* AHCategoryView-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -33,26 +34,27 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		0EF680FC726E14BDDD2ED104AD34F392 /* Pods_AHCategoryView_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_AHCategoryView_Example.framework; path = "Pods-AHCategoryView_Example.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		0EF680FC726E14BDDD2ED104AD34F392 /* Pods_AHCategoryView_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AHCategoryView_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		16BBE38B27D2DD45D1DB01A6F56CFBFB /* Pods-AHCategoryView_Example-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AHCategoryView_Example-acknowledgements.markdown"; sourceTree = "<group>"; };
 		1D5C571FFF04399E5026D378CBF84532 /* Pods-AHCategoryView_Tests-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AHCategoryView_Tests-frameworks.sh"; sourceTree = "<group>"; };
-		25EBFDEBDE1EFADEE6ED9645E4FB8091 /* Pods_AHCategoryView_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_AHCategoryView_Tests.framework; path = "Pods-AHCategoryView_Tests.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		25EBFDEBDE1EFADEE6ED9645E4FB8091 /* Pods_AHCategoryView_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_AHCategoryView_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2CF7CA05FE7BD061FADD67BC8C46DA22 /* Pods-AHCategoryView_Example-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-AHCategoryView_Example-umbrella.h"; sourceTree = "<group>"; };
 		349C8BAF965776A487478E9D51D4B8F5 /* AHPageContainerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AHPageContainerView.swift; sourceTree = "<group>"; };
-		397A7C666C0C2BDFEA73C2F493508250 /* AHCategoryView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = AHCategoryView.framework; path = AHCategoryView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		43D282CA63EB49151D31F750A05EF97C /* AHCategoryView.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = AHCategoryView.modulemap; sourceTree = "<group>"; };
+		397A7C666C0C2BDFEA73C2F493508250 /* AHCategoryView.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AHCategoryView.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		43D282CA63EB49151D31F750A05EF97C /* AHCategoryView.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = AHCategoryView.modulemap; sourceTree = "<group>"; };
 		4A49A8066D2329919CD6B2D5F6D6A2B5 /* Pods-AHCategoryView_Example-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AHCategoryView_Example-dummy.m"; sourceTree = "<group>"; };
 		4D338EB065C565925AE122110832751B /* Pods-AHCategoryView_Tests-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-AHCategoryView_Tests-acknowledgements.plist"; sourceTree = "<group>"; };
 		51E36EBB0C1F249BBD014A9DAF1D7A49 /* Pods-AHCategoryView_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AHCategoryView_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		7267004D314E1C4ED0596629BF9D86F8 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7284D1948AC3E440F54613F8D115DF0B /* Pods-AHCategoryView_Tests-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-AHCategoryView_Tests-dummy.m"; sourceTree = "<group>"; };
-		8326D07BD84E95E823B7800DCA3407DC /* Pods-AHCategoryView_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-AHCategoryView_Tests.modulemap"; sourceTree = "<group>"; };
+		8326D07BD84E95E823B7800DCA3407DC /* Pods-AHCategoryView_Tests.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-AHCategoryView_Tests.modulemap"; sourceTree = "<group>"; };
 		92B9F871B460A290B4A9299FC75A8E15 /* Pods-AHCategoryView_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AHCategoryView_Example-resources.sh"; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		967129FB4A8D957ADFCBA3E8CC267BEE /* AHCategoryView.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AHCategoryView.xcconfig; sourceTree = "<group>"; };
 		9D88F6E8C8F5B8A8F395E1DA56303D6D /* AHCategoryView-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "AHCategoryView-dummy.m"; sourceTree = "<group>"; };
 		9F8E6F0E15C777864E7C01161174F734 /* AHCategoryView-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AHCategoryView-prefix.pch"; sourceTree = "<group>"; };
+		A1B932AB1F1AC3C10065AAEB /* AHStackButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AHStackButton.swift; sourceTree = "<group>"; };
 		AED666E7A990F9037D5B437A32FE3E41 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B0911F4B5809EA22CF7C70BA726635D1 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		B807CB2F9C61E00DAF39C27CDCBD4AAC /* Pods-AHCategoryView_Tests-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-AHCategoryView_Tests-acknowledgements.markdown"; sourceTree = "<group>"; };
@@ -62,7 +64,7 @@
 		CBF9BD355CCB836573DEE2E15386470F /* Pods-AHCategoryView_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AHCategoryView_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		CD733CEEDD567584E166188D5D5CBF0F /* AHCategoryNavBar.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AHCategoryNavBar.swift; sourceTree = "<group>"; };
 		CF63AE3305CFE267A10293F9F55C95AB /* AHCategoryView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = AHCategoryView.swift; sourceTree = "<group>"; };
-		D3ADC8EDC9CBE5CA647833AED0DD26CA /* Pods-AHCategoryView_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-AHCategoryView_Example.modulemap"; sourceTree = "<group>"; };
+		D3ADC8EDC9CBE5CA647833AED0DD26CA /* Pods-AHCategoryView_Example.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-AHCategoryView_Example.modulemap"; sourceTree = "<group>"; };
 		D43A908BA8439C0AA6724D91BE9E640F /* Pods-AHCategoryView_Example-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AHCategoryView_Example-frameworks.sh"; sourceTree = "<group>"; };
 		D9194AB678AFBC4178D3C4E39A016579 /* Pods-AHCategoryView_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-AHCategoryView_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		E0F099027A2FE32F7C7DCBD5B396892F /* Pods-AHCategoryView_Tests-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-AHCategoryView_Tests-resources.sh"; sourceTree = "<group>"; };
@@ -162,12 +164,12 @@
 		B3A372B92868157F1B5B82C5B9D6CEB2 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				A1B932AB1F1AC3C10065AAEB /* AHStackButton.swift */,
 				CD733CEEDD567584E166188D5D5CBF0F /* AHCategoryNavBar.swift */,
 				F1374546D64722517CFC0FD7B2324782 /* AHCategoryNavBarStyle.swift */,
 				CF63AE3305CFE267A10293F9F55C95AB /* AHCategoryView.swift */,
 				349C8BAF965776A487478E9D51D4B8F5 /* AHPageContainerView.swift */,
 			);
-			name = Classes;
 			path = Classes;
 			sourceTree = "<group>";
 		};
@@ -211,7 +213,6 @@
 			children = (
 				B3A372B92868157F1B5B82C5B9D6CEB2 /* Classes */,
 			);
-			name = AHCategoryView;
 			path = AHCategoryView;
 			sourceTree = "<group>";
 		};
@@ -369,6 +370,7 @@
 				3F896A4EE565D5D4F55A2794956FF952 /* AHCategoryView-dummy.m in Sources */,
 				71752DEEDC733C51078A4522F2435F4C /* AHCategoryView.swift in Sources */,
 				666F484C1BC327A2233C5455FA010F64 /* AHPageContainerView.swift in Sources */,
+				A1B932AC1F1AC3C10065AAEB /* AHStackButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
