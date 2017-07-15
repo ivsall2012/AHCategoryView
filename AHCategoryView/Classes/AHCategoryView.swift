@@ -80,7 +80,7 @@ private extension AHCategoryView {
     }
 }
 
-extension UIColor {
+internal extension UIColor {
     class func random() -> UIColor {
         let red = CGFloat(arc4random_uniform(256)) / 255.0
         let green = CGFloat(arc4random_uniform(256)) / 255.0

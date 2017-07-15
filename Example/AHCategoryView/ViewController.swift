@@ -21,10 +21,11 @@ class ViewController: UIViewController {
         
         var style = AHCategoryNavBarStyle()
         style.isScrollabel = false
-        style.showIndicator = false
+        style.showIndicator = true
         style.normalColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
         style.selectedColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        style.showbgMasView = false
+        style.showbgMasView = true
+        style.showTransitionAnimation = true
         let frame = CGRect(x: 0, y: 64, width: view.bounds.width, height: view.bounds.height - 64)
         let categoryView = AHCategoryView(frame: frame, categories: categories, childVCs: childVCs, parentVC: self, barStyle: style)
         

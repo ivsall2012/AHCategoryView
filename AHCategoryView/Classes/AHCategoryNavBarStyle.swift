@@ -15,7 +15,8 @@ public struct AHCategoryNavBarStyle {
     public var isScrollabel = false
     public var fontSize: CGFloat = 15.0
     public var selectedFontSize: CGFloat = 17.0
-    
+    public var showTransitionAnimation = true
+    public var showBarSelectionAnimation = true
     /// use RGB channels!!!
     public var normalColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
     /// use RGB channels!!!

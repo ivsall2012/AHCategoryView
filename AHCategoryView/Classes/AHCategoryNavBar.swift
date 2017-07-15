@@ -192,7 +192,6 @@ private extension AHCategoryNavBar {
         }
         delegate?.categoryNavBar(self, willSwitchIndexFrom: currentLabelTag, to: currentLabel.tag)
         
-        
         handleLabelSwitching(currentLabel: currentLabel)
         handleIndicator(currentLabel: currentLabel)
         handleBgMaskView(currentLabel: currentLabel)
@@ -207,7 +206,9 @@ private extension AHCategoryNavBar {
         currentLabel.textColor = barStyle.selectedColor
         currentLabelTag = currentLabel.tag
         
-        scrollToCenter(currentLabel: currentLabel)
+        if barStyle.isScrollabel {
+            scrollToCenter(currentLabel: currentLabel)
+        }
         
     }
     
@@ -217,10 +218,16 @@ private extension AHCategoryNavBar {
         }
         
         let textWidth = getTextWidth(for: currentLabel)
-        UIView.animate(withDuration: 0.25) {
+        if barStyle.showBarSelectionAnimation {
+            UIView.animate(withDuration: 0.25) {
+                self.indicator.frame.size.width = textWidth
+                self.indicator.center.x = currentLabel.center.x
+            }
+        }else{
             self.indicator.frame.size.width = textWidth
             self.indicator.center.x = currentLabel.center.x
         }
+        
     }
     
     func handleBgMaskView(currentLabel: UILabel) {
@@ -228,10 +235,16 @@ private extension AHCategoryNavBar {
             return
         }
         let textWidth = getTextWidth(for: currentLabel)
-        UIView.animate(withDuration: 0.25) {
+        if barStyle.showBarSelectionAnimation {
+            UIView.animate(withDuration: 0.25) {
+                self.bgMaskView.frame.size.width = textWidth + 2 * edgeMargin
+                self.bgMaskView.center.x = currentLabel.center.x
+            }
+        }else{
             self.bgMaskView.frame.size.width = textWidth + 2 * edgeMargin
             self.bgMaskView.center.x = currentLabel.center.x
         }
+        
     }
     
     func scrollToCenter(currentLabel: UILabel) {
@@ -263,7 +276,7 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
         guard toIndex < labels.count else {
             return
         }
-        print("didSwitchIndexTo")
+
         let currentLabel = labels[toIndex]
         handleLabelSwitching(currentLabel: currentLabel)
         handleIndicator(currentLabel: currentLabel)
@@ -271,13 +284,16 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
     }
     
      public func categoryContainer(_ container: UIView, transitioningFromIndex fromIndex:Int, toIndex:Int, progress: CGFloat) {
+        guard barStyle.showTransitionAnimation else {
+            return
+        }
         guard fromIndex >= 0, fromIndex < labels.count else {
             return
         }
         guard toIndex >= 0, toIndex < labels.count else {
             return
         }
-
+        
         makeColorTransition(fromIndex: fromIndex, toIndex: toIndex, progress: progress)
         makeIndicatorTransition(fromIndex: fromIndex, toIndex: toIndex, progress: progress)
         makeBgMaskViewTransition(fromIndex: fromIndex, toIndex: toIndex, progress: progress)
@@ -332,6 +348,7 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
         }
         let fromLabel = labels[fromIndex]
         let toLabel = labels[toIndex]
+        
         
         let deltaWidth = (toLabel.frame.size.width - fromLabel.frame.size.width) * progress
         let deltaX = (toLabel.center.x - fromLabel.center.x) * progress
