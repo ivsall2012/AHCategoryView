@@ -26,7 +26,14 @@ class ViewController: UIViewController {
         style.showIndicator = true
         style.normalColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
         style.selectedColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        style.showbgMasView = false
+        style.showBgMaskView = true
+        
+        // test custom maskView
+//        let customeMask = UIView()
+//        customeMask.backgroundColor = UIColor.yellow
+//        style.bgMaskView = customeMask
+        
+        
         style.showTransitionAnimation = true
         let frame = CGRect(x: 0, y: 64, width: view.bounds.width, height: view.bounds.height - 64)
         
@@ -59,10 +66,12 @@ class ViewController: UIViewController {
 //            print("set meItem")
 //        }
         
-        // test select categoryItem
-        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-            self.categoryView.select(at: 3)
-        }
+        
+//        // test select categoryItem
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+//            self.categoryView.select(at: 3)
+//        }
+
     }
 
 }

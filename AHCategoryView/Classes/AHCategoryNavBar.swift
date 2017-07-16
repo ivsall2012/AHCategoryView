@@ -42,12 +42,11 @@ open class AHCategoryNavBar: UIView {
     
     
     fileprivate lazy var bgMaskView: UIView = {
+        print("bgMaskView")
         let maskView = UIView()
-        maskView.backgroundColor = UIColor.darkGray
-        maskView.frame.size.height = self.bounds.height
+        maskView.backgroundColor = self.barStyle.bgMaskViewColor
         maskView.layer.masksToBounds = true
         maskView.layer.cornerRadius = (self.barStyle.fontSize + edgeMargin) * 0.5
-        self.scrollView.insertSubview(maskView, at: 0)
         return maskView
     }()
     
@@ -89,6 +88,7 @@ open class AHCategoryNavBar: UIView {
         let btn = buttons[index]
         titleBtnTapped(btn)
     }
+    
     
 }
 
@@ -196,11 +196,16 @@ fileprivate extension AHCategoryNavBar {
     }
     
     func setupBgMaskView() {
-        guard barStyle.showbgMasView else {
+        guard barStyle.showBgMaskView else {
             return
         }
         let defaultBtn = buttons[0]
         let width: CGFloat = defaultBtn.intrinsicContentSize.width
+        
+        if let customMask = barStyle.bgMaskView {
+            bgMaskView = customMask
+        }
+        scrollView.insertSubview(bgMaskView, at: 0)
         
         bgMaskView.frame.size.width = width + 2 * edgeMargin
         bgMaskView.frame.size.height = barStyle.fontSize + 2 * edgeMargin
@@ -277,7 +282,7 @@ private extension AHCategoryNavBar {
     }
     
     func handleBgMaskView(currentBtn: UIButton) {
-        guard barStyle.showbgMasView else {
+        guard barStyle.showBgMaskView else {
             return
         }
         let width = currentBtn.intrinsicContentSize.width
@@ -394,7 +399,7 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
     }
     
     func makeBgMaskViewTransition(fromIndex: Int, toIndex: Int, progress: CGFloat) {
-        guard barStyle.showbgMasView else {
+        guard barStyle.showBgMaskView else {
             return
         }
         let fromBtn = buttons[fromIndex]

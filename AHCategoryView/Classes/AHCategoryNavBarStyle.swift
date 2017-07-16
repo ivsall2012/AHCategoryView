@@ -18,6 +18,12 @@ public struct AHCategoryNavBarStyle {
     public var showTransitionAnimation = true
     public var showBarSelectionAnimation = true
     public var defaultCategoryIndex: Int = 0
+    
+    // the default bgMaskView's background color
+    public var bgMaskViewColor = UIColor.darkGray
+    
+    // a custome bgMaskView
+    public var bgMaskView: UIView? = nil
     /// use RGB channels!!!
     public var normalColor = UIColor(red: 0.0, green: 0.0, blue: 0.0, alpha: 1.0)
     /// use RGB channels!!!
@@ -30,7 +36,7 @@ public struct AHCategoryNavBarStyle {
     public var indicatorHeight:CGFloat = 2.0
     public var indicatorColor:UIColor = UIColor(red: 244.0/255.0, green: 173.0/255.0, blue: 98.0/255.0, alpha: 1.0)
     
-    public var showbgMasView = false
+    public var showBgMaskView = false
     /// use RGB channels!!!
     public var bgMaskColor: UIColor = UIColor(red: 85.0/255.0, green: 85.0/255.0, blue: 85.0/255.0, alpha: 1.0)
     /// Position the navBar on top or bottom
