@@ -9,11 +9,12 @@
 import UIKit
 import AHCategoryView
 class ViewController: UIViewController {
-    let categoryTitles = ["Me","Featured", "Charts", "Live", "Radio"]
+    let categoryTitles = ["Featured", "Charts", "Live", "Radio"]
     override func viewDidLoad() {
         super.viewDidLoad()
         var childVCs = [UIViewController]()
-        for _ in 0..<categoryTitles.count {
+        // the extra 1 is for the first meItem
+        for _ in 0..<(categoryTitles.count + 1) {
             let vc = UIViewController()
             vc.view.backgroundColor = UIColor.random()
             childVCs.append(vc)
@@ -24,12 +25,16 @@ class ViewController: UIViewController {
         style.showIndicator = true
         style.normalColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
         style.selectedColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        style.showbgMasView = true
+        style.showbgMasView = false
         style.showTransitionAnimation = true
         let frame = CGRect(x: 0, y: 64, width: view.bounds.width, height: view.bounds.height - 64)
         
         
         var categoryItems = [AHCategoryItem]()
+        var meItem = AHCategoryItem()
+        meItem.normalImage = UIImage(named: "me-normal")
+        meItem.selectedImage = UIImage(named: "me-selected")
+        categoryItems.append(meItem)
         categoryTitles.forEach { (titel) in
             var item = AHCategoryItem()
             item.title = titel

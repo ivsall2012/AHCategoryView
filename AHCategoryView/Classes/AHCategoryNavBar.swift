@@ -21,7 +21,11 @@ open class AHCategoryNavBar: UIView {
     
     fileprivate lazy var scrollView: UIScrollView = UIScrollView(frame: self.bounds)
     
+    // this tag relects any changes in VC switching
     fileprivate var currentButtonTag: Int = 0
+    
+    // this button keep track of which button being tapped previously
+    fileprivate weak var previousButton: UIButton?
     
     fileprivate lazy var buttonHeight: CGFloat = self.bounds.height
     
@@ -94,6 +98,20 @@ private extension AHCategoryNavBar {
                 btn.titleLabel?.font = buttonFont
             }
             
+            if let normalImage = item.normalImage {
+                btn.setImage(normalImage, for: .normal)
+            }
+            
+            if let selectedImage = item.selectedImage {
+                btn.setImage(selectedImage, for: .selected)
+                // select default button
+                if i == barStyle.defaultCategoryIndex {
+                    // init previousButton
+                    previousButton = btn
+                    btn.isSelected = true
+                }
+            }
+            btn.imageView?.contentMode = .scaleAspectFill
             btn.tag = i
             btn.isHighlighted = false
             
@@ -101,7 +119,6 @@ private extension AHCategoryNavBar {
             let y: CGFloat = 0.0
             var width: CGFloat = 0.0
             let height = self.buttonHeight
-//            let textWidth: CGFloat = getTextWidth(for: label)
             let textWidth: CGFloat = btn.intrinsicContentSize.width
             
             
@@ -112,6 +129,10 @@ private extension AHCategoryNavBar {
                     let previousBtn = buttons[i - 1]
                     x = previousBtn.frame.maxX + barStyle.interItemSpace
                 }
+                // special adjustment for the default button
+                if i == barStyle.defaultCategoryIndex {
+                    x = barStyle.interItemSpace * 0.5
+                }
             }else{
                 // not scrollabel, then divide width equally for all labels
                 width = self.bounds.width / CGFloat(categories.count)
@@ -119,11 +140,6 @@ private extension AHCategoryNavBar {
                 if i > 0 {
                     x = width * CGFloat(i)
                 }
-            }
-            
-            // special adjustment for the default button
-            if i == barStyle.defaultCategoryIndex {
-                x = barStyle.interItemSpace * 0.5
             }
             
             
@@ -165,7 +181,7 @@ private extension AHCategoryNavBar {
     }
     
     
-    
+    /// Use view.intrinsicContentSize
     func getTextWidth(for label: UILabel) -> CGFloat {
         
         let font = UIFont.systemFont(ofSize: barStyle.fontSize)
@@ -183,8 +199,15 @@ private extension AHCategoryNavBar {
 private extension AHCategoryNavBar {
     @objc func titleBtnTapped(_ btn: UIButton) {
         guard btn.tag != currentButtonTag else {
+            // prevent mutiple tapping on the same button
             return
         }
+        
+        previousButton?.isSelected = false
+        btn.isSelected = true
+        previousButton = btn
+        
+        
         delegate?.categoryNavBar(self, willSwitchIndexFrom: currentButtonTag, to: btn.tag)
         
         handleBtnSwitching(currentBtn: btn)
@@ -273,6 +296,11 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
         }
 
         let currentBtn = buttons[toIndex]
+        
+        previousButton?.isSelected = false
+        currentBtn.isSelected = true
+        previousButton = currentBtn
+        
         handleBtnSwitching(currentBtn: currentBtn)
         handleIndicator(currentBtn: currentBtn)
         handleBgMaskView(currentBtn: currentBtn)

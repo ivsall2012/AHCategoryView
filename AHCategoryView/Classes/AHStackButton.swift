@@ -8,7 +8,7 @@
 
 import UIKit
 
-public class AHVerticalButton: UIButton {
+public class AHStackButton: UIButton {
     public var isTitleOnTop = false {
         didSet {
             self.setNeedsLayout()
@@ -26,9 +26,10 @@ public class AHVerticalButton: UIButton {
         setup()
     }
     func setup() {
+        imageView?.contentMode = .scaleAspectFill
         titleLabel?.textAlignment  = .center
     }
-
+    
     
     public override func setTitle(_ title: String?, for state: UIControlState) {
         super.setTitle(title, for: state)
@@ -41,22 +42,20 @@ public class AHVerticalButton: UIButton {
         guard let imageView = self.imageView, let titleLabel = self.titleLabel, let currentImage = self.currentImage else {
             return
         }
-
+        
         imageView.frame.size.width = currentImage.size.width
         imageView.frame.size.height = currentImage.size.height
         
         if isTitleOnTop {
-            titleLabel.center.x = self.bounds.width * 0.5
-            titleLabel.frame.origin.y = self.bounds.height * 0.5 - titleLabel.frame.size.height
+            imageView.center.x = self.bounds.width * 0.5
+            imageView.frame.origin.y = self.bounds.height * 0.5
             
+            //            let labelHeight = self.bounds.height - imageView.frame.size.height
+            let labelWidth = self.bounds.width
             
-            let imageHeight = self.bounds.height - titleLabel.frame.size.height
-            let imageY = self.bounds.height * 0.5
-            let imageWidth = self.bounds.width
-            
-            imageView.center.x = titleLabel.center.x
-            imageView.frame.origin.y = imageY
-            imageView.frame.size = CGSize(width: imageWidth, height: imageHeight)
+            titleLabel.center.x = imageView.center.x
+            titleLabel.frame.origin.y = self.bounds.height * 0.5 - titleLabel.intrinsicContentSize.height
+            titleLabel.frame.size.width = labelWidth
         }else{
             imageView.center.x = self.bounds.width * 0.5
             imageView.frame.origin.y = self.bounds.height * 0.5 - imageView.frame.size.height
