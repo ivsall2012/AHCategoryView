@@ -10,6 +10,7 @@ import UIKit
 import AHCategoryView
 class ViewController: UIViewController {
     let categoryTitles = ["Featured", "Charts", "Live", "Radio"]
+    var categoryView: AHCategoryView!
     override func viewDidLoad() {
         super.viewDidLoad()
         var childVCs = [UIViewController]()
@@ -40,12 +41,29 @@ class ViewController: UIViewController {
             item.title = titel
             categoryItems.append(item)
         }
-        let categoryView = AHCategoryView(frame: frame, categories: categoryItems, childVCs: childVCs, parentVC: self, barStyle: style)
+        categoryView = AHCategoryView(frame: frame, categories: categoryItems, childVCs: childVCs, parentVC: self, barStyle: style)
         
         view.addSubview(categoryView)
         
     }
 
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+//        // test set categoryItem
+//        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+//            var meItem = AHCategoryItem()
+//            meItem.normalImage = UIImage(named: "me-normal")
+//            meItem.selectedImage = UIImage(named: "me-msg")
+//            self.categoryView.set(item: meItem, at: 0)
+//            print("set meItem")
+//        }
+        
+        // test select categoryItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+            self.categoryView.select(at: 3)
+        }
+    }
 
 }
 extension UIColor {

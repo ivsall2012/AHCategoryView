@@ -65,10 +65,35 @@ open class AHCategoryNavBar: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public func setItem(item: AHCategoryItem, for index:Int) {
+        guard index >= 0 && index < categories.count else {
+            fatalError("index out of bound")
+        }
+        
+        let previousItem = categories[index]
+        guard item != previousItem else {
+            return
+        }
+        
+        let btn = buttons[index]
+        categories.remove(at: index)
+        categories.insert(item, at: index)
+        setup(btn, with: item)
+    }
+    
+    public func select(at index: Int) {
+        guard index >= 0 && index < categories.count else {
+            fatalError("index out of bound")
+        }
+        
+        let btn = buttons[index]
+        titleBtnTapped(btn)
+    }
+    
 }
 
 //MARK:- Setups
-private extension AHCategoryNavBar {
+fileprivate extension AHCategoryNavBar {
     func setupUI() {
         setupScrollView()
         addButtons()
@@ -86,31 +111,28 @@ private extension AHCategoryNavBar {
     }
     
     
+    func setup(_ btn: UIButton, with item: AHCategoryItem) {
+        if let itemTitle = item.title {
+            btn.setTitle(itemTitle, for: .normal)
+            btn.setTitleColor(barStyle.normalColor, for: .normal)
+            btn.titleLabel?.textAlignment = .center
+            btn.titleLabel?.font = buttonFont
+        }
+        
+        if let normalImage = item.normalImage {
+            btn.setImage(normalImage, for: .normal)
+        }
+        
+        if let selectedImage = item.selectedImage {
+            btn.setImage(selectedImage, for: .selected)
+        }
+    }
+    
     func addButtons() {
         for i in 0..<categories.count {
             let btn = UIButton()
             let item = categories[i]
-            if let itemTitle = item.title {
-                btn.setTitle(itemTitle, for: .normal)
-                let titleColor = (i == barStyle.defaultCategoryIndex) ? barStyle.selectedColor : barStyle.normalColor
-                btn.setTitleColor(titleColor, for: .normal)
-                btn.titleLabel?.textAlignment = .center
-                btn.titleLabel?.font = buttonFont
-            }
-            
-            if let normalImage = item.normalImage {
-                btn.setImage(normalImage, for: .normal)
-            }
-            
-            if let selectedImage = item.selectedImage {
-                btn.setImage(selectedImage, for: .selected)
-                // select default button
-                if i == barStyle.defaultCategoryIndex {
-                    // init previousButton
-                    previousButton = btn
-                    btn.isSelected = true
-                }
-            }
+            setup(btn, with: item)
             btn.imageView?.contentMode = .scaleAspectFill
             btn.tag = i
             btn.isHighlighted = false
@@ -142,7 +164,13 @@ private extension AHCategoryNavBar {
                 }
             }
             
-            
+            // select default button
+            if i == barStyle.defaultCategoryIndex {
+                // init previousButton
+                previousButton = btn
+                btn.setTitleColor(barStyle.selectedColor, for: .selected)
+                btn.isSelected = true
+            }
             
             btn.frame = CGRect(x: x, y: y, width: width, height: height)
             btn.addTarget(self, action: #selector(titleBtnTapped(_:)), for: .touchUpInside)
@@ -297,13 +325,13 @@ extension AHCategoryNavBar: AHCategoryContainerDelegate {
 
         let currentBtn = buttons[toIndex]
         
-        previousButton?.isSelected = false
-        currentBtn.isSelected = true
-        previousButton = currentBtn
-        
         handleBtnSwitching(currentBtn: currentBtn)
         handleIndicator(currentBtn: currentBtn)
         handleBgMaskView(currentBtn: currentBtn)
+        
+        previousButton?.isSelected = false
+        currentBtn.isSelected = true
+        previousButton = currentBtn
     }
     
      public func categoryContainer(_ container: UIView, transitioningFromIndex fromIndex:Int, toIndex:Int, progress: CGFloat) {

@@ -41,11 +41,15 @@ public struct AHCategoryNavBarStyle {
 }
 
 
-public struct AHCategoryItem {
+public struct AHCategoryItem: Equatable {
     public var title: String?
     public var normalImage: UIImage?
     public var selectedImage: UIImage?
     public init() {}
+    
+    public static func ==(lhs: AHCategoryItem, rhs: AHCategoryItem) -> Bool {
+        return lhs.title == rhs.title && lhs.normalImage == rhs.normalImage && lhs.selectedImage == rhs.selectedImage
+    }
 }
 
 

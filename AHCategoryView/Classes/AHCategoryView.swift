@@ -53,6 +53,16 @@ open class AHCategoryView: UIView {
         fatalError("init(coder:) has not been implemented")
     }
     
+    public func set(item: AHCategoryItem, at index: Int) {
+        navBar.setItem(item: item, for: index)
+    }
+    
+    public func select(at index:Int) {
+        // select through NavBar only
+        // to prevent infinite loops by delegate calls
+        navBar.select(at: index)
+    }
+    
 }
 
 //MARK:- For setups
