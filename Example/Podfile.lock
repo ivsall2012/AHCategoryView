@@ -1,5 +1,5 @@
 PODS:
-  - AHCategoryView (0.1.0)
+  - AHCategoryView (1.0.0)
 
 DEPENDENCIES:
   - AHCategoryView (from `../`)
@@ -9,7 +9,7 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AHCategoryView: 9aa6ba5cbb668d443fc375da9d19e0191d2c4f00
+  AHCategoryView: dec2f8bdffedfca832e5b5b896f1b29f834dd8c2
 
 PODFILE CHECKSUM: ac7dcc6756465f9129fe6ca00dc6cd97a39babd2
 

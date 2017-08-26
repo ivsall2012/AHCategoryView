@@ -60,10 +60,9 @@ class AHPageContainerView: UIView {
         pageVC.delegate = self
         pageVC.dataSource = self
         for view in pageVC.view.subviews {
-//            if view.isKind(of: UIPageControl.self) {
-//                print("got pageControl")
-//                pageControl = view as? UIPageControl
-//            }
+            if view.isKind(of: UIPageControl.self) {
+                view.removeFromSuperview()
+            }
             if view.isKind(of: UIScrollView.self) {
                 pageScrollView = view as? UIScrollView
                 pageScrollView?.delegate = self

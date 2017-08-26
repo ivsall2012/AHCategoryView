@@ -35,7 +35,7 @@ open class AHCategoryView: UIView {
     fileprivate weak var parentVC: UIViewController!
     fileprivate var barStyle: AHCategoryNavBarStyle
     
-    fileprivate(set) var navBar: AHCategoryNavBar!
+    public fileprivate(set) var navBar: AHCategoryNavBar!
     fileprivate(set) var containerView: AHPageContainerView!
     
     public init(frame: CGRect, categories: [AHCategoryItem], childVCs: [UIViewController], parentVC: UIViewController, barStyle: AHCategoryNavBarStyle) {
@@ -62,6 +62,15 @@ open class AHCategoryView: UIView {
         // to prevent infinite loops by delegate calls
         navBar.select(at: index)
     }
+    
+    public func setBadge(atIndex index: Int, numberOfBadge num: Int) {
+        guard index >= 0 && index <= categories.count else {
+            return
+        }
+        navBar.setBadge(atIndex: index, numberOfBadge: num)
+    }
+    
+    
     
 }
 
@@ -101,7 +110,7 @@ internal extension UIColor {
     /// return RGB components in scale of 0~255.0
     func getRGBComponents() -> (CGFloat, CGFloat, CGFloat) {
         guard let components = self.cgColor.components, components.count == 4 else {
-            fatalError("Please use RGB channels to for colors")
+            fatalError("Please use RGB channels for colors")
         }
         
         return (components[0], components[1], components[2])

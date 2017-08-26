@@ -31,7 +31,7 @@ public struct AHCategoryNavBarStyle {
     
     /// works only when isScrollabel is true
     public var interItemSpace: CGFloat = 20.0
-    
+    public var showSeparators = true
     public var showIndicator = true
     public var indicatorHeight:CGFloat = 2.0
     public var indicatorColor:UIColor = UIColor(red: 244.0/255.0, green: 173.0/255.0, blue: 98.0/255.0, alpha: 1.0)
@@ -47,15 +47,11 @@ public struct AHCategoryNavBarStyle {
 }
 
 
-public struct AHCategoryItem: Equatable {
+public struct AHCategoryItem {
     public var title: String?
     public var normalImage: UIImage?
     public var selectedImage: UIImage?
     public init() {}
-    
-    public static func ==(lhs: AHCategoryItem, rhs: AHCategoryItem) -> Bool {
-        return lhs.title == rhs.title && lhs.normalImage == rhs.normalImage && lhs.selectedImage == rhs.selectedImage
-    }
 }
 
 

@@ -10,14 +10,27 @@ import UIKit
 
 private let edgeMargin:CGFloat = 6.0
 
-open class AHCategoryNavBar: UIView {
+private class BadgeInfo {
+    // the index that the button in categories
+    var index: Int = -1
+    var badgeLabel: UILabel? = nil
+    var numberOfBadge: Int = -1
+}
+
+
+public class AHCategoryNavBar: UIView {
     public weak var delegate: AHCategoryNavBarDelegate?
     
     fileprivate var barStyle: AHCategoryNavBarStyle
     
     fileprivate var categories: [AHCategoryItem]
     
+    fileprivate var separators = [UIView]()
+    
     fileprivate lazy var buttons = [UIButton]()
+    
+    // each key is the index from categories or buttons
+    fileprivate lazy var badgeDict = [Int : BadgeInfo]()
     
     fileprivate lazy var scrollView: UIScrollView = UIScrollView(frame: self.bounds)
     
@@ -42,7 +55,6 @@ open class AHCategoryNavBar: UIView {
     
     
     fileprivate lazy var bgMaskView: UIView = {
-        print("bgMaskView")
         let maskView = UIView()
         maskView.backgroundColor = self.barStyle.bgMaskViewColor
         maskView.layer.masksToBounds = true
@@ -54,8 +66,9 @@ open class AHCategoryNavBar: UIView {
     public init(frame: CGRect, categories: [AHCategoryItem], barStyle: AHCategoryNavBarStyle) {
         self.categories = categories
         self.barStyle = barStyle
-    
+        
         super.init(frame: frame)
+        self.backgroundColor = UIColor.white
         setupUI()
         
     }
@@ -67,11 +80,6 @@ open class AHCategoryNavBar: UIView {
     public func setItem(item: AHCategoryItem, for index:Int) {
         guard index >= 0 && index < categories.count else {
             fatalError("index out of bound")
-        }
-        
-        let previousItem = categories[index]
-        guard item != previousItem else {
-            return
         }
         
         let btn = buttons[index]
@@ -89,19 +97,103 @@ open class AHCategoryNavBar: UIView {
         titleBtnTapped(btn)
     }
     
+    public func setBadge(atIndex index:Int, numberOfBadge: Int) {
+        guard index >= 0 && index < categories.count else {
+            fatalError("index out of bound")
+        }
+        
+        let btn = buttons[index]
+
+        if let badgeInfo = badgeDict[index]{
+            badgeInfo.numberOfBadge = numberOfBadge
+            addBadgeToBtn(btn: btn, badgeInfo: badgeInfo)
+        }else{
+            let badgeInfo = BadgeInfo()
+            badgeInfo.index = index
+            badgeInfo.numberOfBadge = numberOfBadge
+            badgeDict[index] = badgeInfo
+            addBadgeToBtn(btn: btn, badgeInfo: badgeInfo)
+        }
+        
+    }
+    
+    private func addBadgeToBtn(btn: UIButton, badgeInfo: BadgeInfo) {
+        // Removing process
+        if badgeInfo.numberOfBadge == 0 {
+            guard let badgeLabel = badgeInfo.badgeLabel else {
+                return
+            }
+            badgeLabel.removeFromSuperview()
+            badgeDict.removeValue(forKey: badgeInfo.index)
+            return
+        }
+        
+        // In case there's alrady a badgeLabel, remove it now.
+        if let badgeLabel = badgeInfo.badgeLabel {
+            badgeLabel.removeFromSuperview()
+        }
+        
+        // Adding process
+        btn.layoutSubviews()
+        guard let btnTitleLabel = btn.titleLabel else {
+            return
+        }
+        let badgeLabel = UILabel()
+        badgeLabel.textAlignment = .center
+
+        
+        if badgeInfo.numberOfBadge == 1 {
+            let dotSize = CGSize(width: 10.0, height: 10.0)
+            badgeLabel.backgroundColor = UIColor.red
+            badgeLabel.frame.size = dotSize
+            badgeLabel.frame.origin.x = btnTitleLabel.frame.maxX + 8.0
+            badgeLabel.frame.origin.y = btnTitleLabel.frame.origin.y - 8.0
+            badgeLabel.layer.cornerRadius = dotSize.height * 0.5
+            badgeLabel.layer.masksToBounds = true
+            btn.addSubview(badgeLabel)
+            badgeInfo.badgeLabel = badgeLabel
+            return
+        }
+        
+        if badgeInfo.numberOfBadge > 1 {
+            badgeLabel.backgroundColor = UIColor.red
+            badgeLabel.textColor = UIColor.white
+            badgeLabel.font = UIFont.systemFont(ofSize: 12.0)
+            badgeLabel.text = "\(badgeInfo.numberOfBadge)"
+            badgeLabel.sizeToFit()
+            let oldFrame = badgeLabel.frame
+            badgeLabel.frame.size = CGSize(width: oldFrame.width + 5.0, height: oldFrame.height)
+            badgeLabel.frame.origin.x = btnTitleLabel.frame.maxX
+            badgeLabel.frame.origin.y = btnTitleLabel.frame.origin.y - badgeLabel.frame.size.height * 0.5
+            badgeLabel.layer.cornerRadius = badgeLabel.frame.size.height * 0.5
+            badgeLabel.layer.masksToBounds = true
+            btn.addSubview(badgeLabel)
+            badgeInfo.badgeLabel = badgeLabel
+            return
+        }
+        
+        
+    }
     
 }
 
 //MARK:- Setups
 fileprivate extension AHCategoryNavBar {
     func setupUI() {
+        setupBottomSeparator()
         setupScrollView()
         addButtons()
         setupIndicator()
         setupBgMaskView()
 
     }
-    
+    func setupBottomSeparator() {
+        let separator = UIView()
+        let height: CGFloat = 0.5
+        separator.frame = CGRect(x: 0, y: self.bounds.height - height, width: self.bounds.width, height: height)
+        separator.backgroundColor = UIColor.lightGray
+        self.addSubview(separator)
+    }
     func setupScrollView(){
         scrollView.showsHorizontalScrollIndicator = false
         if !barStyle.isScrollabel {
