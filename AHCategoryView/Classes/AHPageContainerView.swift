@@ -68,18 +68,22 @@ class AHPageContainerView: UIView {
                 pageScrollView?.delegate = self
             }
         }
-        pageVC.view.frame = self.bounds
+        pageVC.view.frame = CGRect(x: 0, y: 0, width: 375, height: self.bounds.height + 37.0)
         
         pageVC.willMove(toParentViewController: self.parentVC)
         self.parentVC.addChildViewController(pageVC)
         pageVC.didMove(toParentViewController: self.parentVC)
-        
         pageVC.view.willMove(toSuperview: self)
         addSubview(pageVC.view)
         pageVC.view.didMoveToSuperview()
         
         pageVC.setViewControllers([childVCs.first!], direction: .forward, animated: false, completion: nil)
         
+        
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
         
     }
 

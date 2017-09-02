@@ -44,6 +44,9 @@ public class AHCategoryNavBar: UIView {
     
     fileprivate lazy var buttonFont: UIFont = UIFont.systemFont(ofSize: self.barStyle.fontSize)
     
+    /// Is the UI setup
+    fileprivate var isSetup = false
+    
     fileprivate lazy var indicator: UIView = {
         let view = UIView()
         view.frame.size.height = self.barStyle.indicatorHeight
@@ -69,13 +72,28 @@ public class AHCategoryNavBar: UIView {
         
         super.init(frame: frame)
         self.backgroundColor = UIColor.white
-        setupUI()
+        
+        if barStyle.isEmbedded && frame != .zero {
+            setupUI()
+            isSetup = true
+        }
         
     }
+
+    public override var frame: CGRect {
+        didSet {
+            if !barStyle.isEmbedded && frame != .zero && isSetup == false {
+                setupUI()
+                isSetup = true
+            }
+        }
+    }
+    
     
     public required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
     
     public func setItem(item: AHCategoryItem, for index:Int) {
         guard index >= 0 && index < categories.count else {
@@ -135,9 +153,22 @@ public class AHCategoryNavBar: UIView {
         
         // Adding process
         btn.layoutSubviews()
-        guard let btnTitleLabel = btn.titleLabel else {
+        
+        
+        let item = self.categories[badgeInfo.index]
+        
+        var referenceFrame: CGRect
+        // Image has a higher priority
+        if (item.normalImage != nil || item.selectedImage != nil),
+            let imageViewFrame = btn.imageView?.frame, imageViewFrame != CGRect.zero {
+            referenceFrame = imageViewFrame
+        }else if let _ = item.title, let labelFrame = btn.titleLabel?.frame{
+            referenceFrame = labelFrame
+        }else{
+            print("category at section:(badgeInfo.index) doesn't have a valid AHCategoryItem")
             return
         }
+        
         let badgeLabel = UILabel()
         badgeLabel.textAlignment = .center
 
@@ -146,8 +177,8 @@ public class AHCategoryNavBar: UIView {
             let dotSize = CGSize(width: 10.0, height: 10.0)
             badgeLabel.backgroundColor = UIColor.red
             badgeLabel.frame.size = dotSize
-            badgeLabel.frame.origin.x = btnTitleLabel.frame.maxX + 8.0
-            badgeLabel.frame.origin.y = btnTitleLabel.frame.origin.y - 8.0
+            badgeLabel.frame.origin.x = referenceFrame.maxX
+            badgeLabel.frame.origin.y = referenceFrame.origin.y
             badgeLabel.layer.cornerRadius = dotSize.height * 0.5
             badgeLabel.layer.masksToBounds = true
             btn.addSubview(badgeLabel)
@@ -163,8 +194,8 @@ public class AHCategoryNavBar: UIView {
             badgeLabel.sizeToFit()
             let oldFrame = badgeLabel.frame
             badgeLabel.frame.size = CGSize(width: oldFrame.width + 5.0, height: oldFrame.height)
-            badgeLabel.frame.origin.x = btnTitleLabel.frame.maxX
-            badgeLabel.frame.origin.y = btnTitleLabel.frame.origin.y - badgeLabel.frame.size.height * 0.5
+            badgeLabel.frame.origin.x = referenceFrame.maxX
+            badgeLabel.frame.origin.y = referenceFrame.origin.y - badgeLabel.frame.size.height * 0.5
             badgeLabel.layer.cornerRadius = badgeLabel.frame.size.height * 0.5
             badgeLabel.layer.masksToBounds = true
             btn.addSubview(badgeLabel)
@@ -188,6 +219,9 @@ fileprivate extension AHCategoryNavBar {
 
     }
     func setupBottomSeparator() {
+        guard barStyle.showSeparators else {
+            return
+        }
         let separator = UIView()
         let height: CGFloat = 0.5
         separator.frame = CGRect(x: 0, y: self.bounds.height - height, width: self.bounds.width, height: height)

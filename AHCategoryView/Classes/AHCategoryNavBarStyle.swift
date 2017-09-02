@@ -42,6 +42,9 @@ public struct AHCategoryNavBarStyle {
     /// Position the navBar on top or bottom
     public var positionOnTop = true
     
+    /// Should navBar be embedded into categoryView. If not, you should position it manually somewhere.
+    public var isEmbedded = true
+    
     public init() {}
     
 }

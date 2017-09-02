@@ -85,13 +85,21 @@ private extension AHCategoryView {
     }
     
     func setupNavBar() {
-        let frame = CGRect(x: 0, y: 0, width: bounds.width, height: barStyle.height)
-        navBar = AHCategoryNavBar(frame: frame, categories: categories, barStyle: barStyle)
+        var barFrame: CGRect?
+        if barStyle.isEmbedded {
+            barFrame = CGRect(x: 0, y: 0, width: bounds.width, height: barStyle.height)
+        }else{
+            barFrame = CGRect.zero
+        }
+        
+        navBar = AHCategoryNavBar(frame: barFrame!, categories: categories, barStyle: barStyle)
         addSubview(navBar)
     }
     
     func setupContainerVC() {
-        let frame = CGRect(x: 0, y: barStyle.height, width: bounds.width, height: bounds.height - barStyle.height)
+        let containerY: CGFloat = barStyle.isEmbedded ? barStyle.height : 0.0
+        let containerHeight: CGFloat = barStyle.isEmbedded ? bounds.height - barStyle.height : bounds.height
+        let frame = CGRect(x: 0, y: containerY, width: bounds.width, height: containerHeight)
         
         containerView = AHPageContainerView(frame: frame, childVCs: childVCs, parentVC: parentVC)
         addSubview(containerView)
