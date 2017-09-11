@@ -29,9 +29,6 @@ public class AHCategoryNavBar: UIView {
     
     fileprivate lazy var buttons = [UIButton]()
     
-    /// The paddings stuck before/after a AHCategoryItem
-    fileprivate var itemPadding: CGFloat = 8.0
-    
     // each key is the index from categories or buttons
     fileprivate lazy var badgeDict = [Int : BadgeInfo]()
     
@@ -273,25 +270,25 @@ fileprivate extension AHCategoryNavBar {
             
             if barStyle.isScrollabel {
                 // scrollabel, each label has its own width according to its text
-                width = textWidth + itemPadding * 2
+                width = textWidth + barStyle.itemPadding * 2
                 if i > 0 {
                     let previousBtn = buttons[i - 1]
                     x = previousBtn.frame.maxX + barStyle.interItemSpace + barStyle.offsetX
                 }
-                // special adjustment for the default button
-                if i == barStyle.defaultCategoryIndex {
-                    x = barStyle.interItemSpace * 0.5
+                // special adjustment for the first button
+                if i == 0 {
+                    x = barStyle.interItemSpace * 0.5 + barStyle.offsetX
                 }
             }else{
                 if barStyle.layoutAlignment == .left {
-                    width = textWidth + itemPadding * 2
+                    width = textWidth + barStyle.itemPadding * 2
                     if i > 0 {
                         let previousBtn = buttons[i - 1]
                         x = previousBtn.frame.maxX + barStyle.interItemSpace + barStyle.offsetX
                     }
-                    // special adjustment for the default button
-                    if i == barStyle.defaultCategoryIndex {
-                        x = barStyle.interItemSpace * 0.5
+                    // special adjustment for the first button
+                    if i == 0 {
+                        x = barStyle.interItemSpace * 0.5 + barStyle.offsetX
                     }
                 }else {
                     width = self.bounds.width / CGFloat(categories.count)
@@ -300,14 +297,6 @@ fileprivate extension AHCategoryNavBar {
                         x = width * CGFloat(i) + barStyle.offsetX
                     }
                 }
-            }
-            
-            // select default button
-            if i == barStyle.defaultCategoryIndex {
-                // init previousButton
-                previousButton = btn
-                btn.setTitleColor(barStyle.selectedColor, for: .selected)
-                btn.isSelected = true
             }
             
             btn.frame = CGRect(x: x, y: y, width: width, height: height)

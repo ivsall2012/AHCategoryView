@@ -19,6 +19,10 @@ public struct AHCategoryNavBarStyle {
     /// The x offset for the navBar in its superView
     public var offsetX: CGFloat = 0.0
     
+    /// The paddings stuck before/after a AHCategoryItem.
+    /// Note: this padding attribute is included into the touch area for each categoryItem.
+    public var itemPadding: CGFloat = 8.0
+    
     /// Laying out category items from left to right, or from center to both sides.
     /// Note: This attribute only works with when isScrollabel=false.
     public var layoutAlignment: AHCategoryNavBarAlignment = .left
@@ -29,7 +33,6 @@ public struct AHCategoryNavBarStyle {
     public var selectedFontSize: CGFloat = 17.0
     public var showTransitionAnimation = true
     public var showBarSelectionAnimation = true
-    public var defaultCategoryIndex: Int = 0
     
     // the default bgMaskView's background color
     public var bgMaskViewColor = UIColor.darkGray

@@ -40,10 +40,10 @@ class ViewController: UIViewController {
         liveItem.title = "Live"
         
         
-        let items = [meItem, featureItem, chartItem]
+        let items = [meItem, featureItem, chartItem, radioItem, liveItem]
         
         
-        for _ in 0..<3 {
+        for _ in 0..<5 {
             let vc = UIViewController()
             vc.view.backgroundColor = UIColor.red
             childVCs.append(vc)
@@ -51,21 +51,23 @@ class ViewController: UIViewController {
         
         let frame = CGRect(x: 0, y: 64.0, width: ScreenSize.width, height: ScreenSize.height - 64.0)
         var style = AHCategoryNavBarStyle()
-//        style.offsetX = -16.0
+        //        style.offsetX = -16.0
+        style.interItemSpace = 5.0
+        style.itemPadding = 8.0
         style.isScrollabel = false
-        style.layoutAlignment = .center
+        style.layoutAlignment = .left
         style.isEmbedded = false
         style.showSeparators = false
         style.indicatorColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)
         style.normalColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
         style.selectedColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)
-        style.defaultCategoryIndex = 1
         self.view.backgroundColor = UIColor.white
         
         let categoryView = AHCategoryView(frame: frame, categories: items, childVCs: childVCs, parentVC: self, barStyle: style)
         self.view.addSubview(categoryView)
         self.categoryView = categoryView
         categoryView.navBar.frame = CGRect(x: 0, y: 0, width: 359.0, height: 44.0)
+        categoryView.select(at: 1)
         self.navigationItem.titleView = categoryView.navBar
         self.navigationController?.navigationBar.barTintColor = UIColor.white
     }
