@@ -29,6 +29,9 @@ public class AHCategoryNavBar: UIView {
     
     fileprivate lazy var buttons = [UIButton]()
     
+    /// The paddings stuck before/after a AHCategoryItem
+    fileprivate var itemPadding: CGFloat = 8.0
+    
     // each key is the index from categories or buttons
     fileprivate lazy var badgeDict = [Int : BadgeInfo]()
     
@@ -230,9 +233,7 @@ fileprivate extension AHCategoryNavBar {
     }
     func setupScrollView(){
         scrollView.showsHorizontalScrollIndicator = false
-        if !barStyle.isScrollabel {
-            scrollView.isScrollEnabled = false
-        }
+        scrollView.isScrollEnabled = barStyle.isScrollabel
         addSubview(scrollView)
     }
     
@@ -272,21 +273,32 @@ fileprivate extension AHCategoryNavBar {
             
             if barStyle.isScrollabel {
                 // scrollabel, each label has its own width according to its text
-                width = textWidth
+                width = textWidth + itemPadding * 2
                 if i > 0 {
                     let previousBtn = buttons[i - 1]
-                    x = previousBtn.frame.maxX + barStyle.interItemSpace
+                    x = previousBtn.frame.maxX + barStyle.interItemSpace + barStyle.offsetX
                 }
                 // special adjustment for the default button
                 if i == barStyle.defaultCategoryIndex {
                     x = barStyle.interItemSpace * 0.5
                 }
             }else{
-                // not scrollabel, then divide width equally for all labels
-                width = self.bounds.width / CGFloat(categories.count)
-                
-                if i > 0 {
-                    x = width * CGFloat(i)
+                if barStyle.layoutAlignment == .left {
+                    width = textWidth + itemPadding * 2
+                    if i > 0 {
+                        let previousBtn = buttons[i - 1]
+                        x = previousBtn.frame.maxX + barStyle.interItemSpace + barStyle.offsetX
+                    }
+                    // special adjustment for the default button
+                    if i == barStyle.defaultCategoryIndex {
+                        x = barStyle.interItemSpace * 0.5
+                    }
+                }else {
+                    width = self.bounds.width / CGFloat(categories.count)
+                    
+                    if i > 0 {
+                        x = width * CGFloat(i) + barStyle.offsetX
+                    }
                 }
             }
             

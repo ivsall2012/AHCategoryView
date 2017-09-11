@@ -8,8 +8,20 @@
 
 import UIKit
 
+public enum AHCategoryNavBarAlignment {
+    case left
+    case center
+}
+
 public struct AHCategoryNavBarStyle {
     public var height: CGFloat = 44.0
+    
+    /// The x offset for the navBar in its superView
+    public var offsetX: CGFloat = 0.0
+    
+    /// Laying out category items from left to right, or from center to both sides.
+    /// Note: This attribute only works with when isScrollabel=false.
+    public var layoutAlignment: AHCategoryNavBarAlignment = .left
     
     /// if set to true, all items will have equal spacing.
     public var isScrollabel = false

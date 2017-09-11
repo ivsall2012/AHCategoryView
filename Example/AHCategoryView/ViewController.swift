@@ -8,50 +8,66 @@
 
 import UIKit
 import AHCategoryView
+
+private let ScreenSize = UIScreen.main.bounds.size
+
 class ViewController: UIViewController {
-    let categoryTitles = ["Featured", "Charts"]
-    var categoryView: AHCategoryView!
+    let categoryTitles = ["Featured", "Charts","Charts","Charts","Charts"]
+    fileprivate weak var categoryView: AHCategoryView!
+    var childVCs = [UIViewController]()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        var childVCs = [UIViewController]()
-        // the extra 1 is for the first meItem
-        for _ in 0..<(categoryTitles.count) {
-            let vc = UIViewController()
-            vc.view.backgroundColor = UIColor.random()
-            childVCs.append(vc)
-        }
-        
-        var style = AHCategoryNavBarStyle()
-        style.isScrollabel = false
-        style.showIndicator = true
-        style.normalColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
-        style.selectedColor = UIColor(red: 1.0, green: 0.0, blue: 0.0, alpha: 1.0)
-        style.showBgMaskView = false
-        
-        // test custom maskView
-//        let customeMask = UIView()
-//        customeMask.backgroundColor = UIColor.yellow
-//        style.bgMaskView = customeMask
+        let searchBtn = UIButton(type: .custom)
+        let searchImg = UIImage(named: "search-magnifier")
+        searchBtn.setImage(searchImg, for: .normal)
+        searchBtn.sizeToFit()
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(customView: searchBtn)
         
         
-        style.showTransitionAnimation = true
-        let frame = CGRect(x: 0, y: 64, width: view.bounds.width, height: view.bounds.height - 64)
-        
-        
-        var categoryItems = [AHCategoryItem]()
         var meItem = AHCategoryItem()
         meItem.normalImage = UIImage(named: "me-normal")
         meItem.selectedImage = UIImage(named: "me-selected")
-//        categoryItems.append(meItem)
-        categoryTitles.forEach { (titel) in
-            var item = AHCategoryItem()
-            item.title = titel
-            categoryItems.append(item)
+        
+        
+        var featureItem = AHCategoryItem()
+        featureItem.title = "Feature"
+        var chartItem = AHCategoryItem()
+        chartItem.title = "Categories"
+        var radioItem = AHCategoryItem()
+        radioItem.title = "Radio"
+        var liveItem = AHCategoryItem()
+        liveItem.title = "Live"
+        
+        
+        let items = [meItem, featureItem, chartItem]
+        
+        
+        for _ in 0..<3 {
+            let vc = UIViewController()
+            vc.view.backgroundColor = UIColor.red
+            childVCs.append(vc)
         }
-        categoryView = AHCategoryView(frame: frame, categories: categoryItems, childVCs: childVCs, parentVC: self, barStyle: style)
         
-        view.addSubview(categoryView)
+        let frame = CGRect(x: 0, y: 64.0, width: ScreenSize.width, height: ScreenSize.height - 64.0)
+        var style = AHCategoryNavBarStyle()
+//        style.offsetX = -16.0
+        style.isScrollabel = false
+        style.layoutAlignment = .center
+        style.isEmbedded = false
+        style.showSeparators = false
+        style.indicatorColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)
+        style.normalColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
+        style.selectedColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)
+        style.defaultCategoryIndex = 1
+        self.view.backgroundColor = UIColor.white
         
+        let categoryView = AHCategoryView(frame: frame, categories: items, childVCs: childVCs, parentVC: self, barStyle: style)
+        self.view.addSubview(categoryView)
+        self.categoryView = categoryView
+        categoryView.navBar.frame = CGRect(x: 0, y: 0, width: 359.0, height: 44.0)
+        self.navigationItem.titleView = categoryView.navBar
+        self.navigationController?.navigationBar.barTintColor = UIColor.white
     }
 
     
