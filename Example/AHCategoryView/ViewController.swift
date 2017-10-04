@@ -57,7 +57,7 @@ class ViewController: UIViewController {
         style.isScrollabel = false
         style.layoutAlignment = .left
         style.isEmbedded = false
-        style.showSeparators = false
+        style.showBottomSeparator = false
         style.indicatorColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)
         style.normalColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
         style.selectedColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)

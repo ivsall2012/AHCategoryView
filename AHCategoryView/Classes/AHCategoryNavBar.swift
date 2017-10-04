@@ -219,7 +219,7 @@ fileprivate extension AHCategoryNavBar {
 
     }
     func setupBottomSeparator() {
-        guard barStyle.showSeparators else {
+        guard barStyle.showBottomSeparator else {
             return
         }
         let separator = UIView()

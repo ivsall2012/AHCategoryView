@@ -46,7 +46,7 @@ public struct AHCategoryNavBarStyle {
     
     /// works only when isScrollabel is true
     public var interItemSpace: CGFloat = 20.0
-    public var showSeparators = true
+    public var showBottomSeparator = true
     public var showIndicator = true
     public var indicatorHeight:CGFloat = 2.0
     public var indicatorColor:UIColor = UIColor(red: 244.0/255.0, green: 173.0/255.0, blue: 98.0/255.0, alpha: 1.0)
