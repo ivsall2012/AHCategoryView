@@ -68,7 +68,7 @@ class AHPageContainerView: UIView {
                 pageScrollView?.delegate = self
             }
         }
-        pageVC.view.frame = CGRect(x: 0, y: 0, width: 375, height: self.bounds.height + 37.0)
+        pageVC.view.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height + 37.0)
         
         pageVC.willMove(toParentViewController: self.parentVC)
         self.parentVC.addChildViewController(pageVC)
