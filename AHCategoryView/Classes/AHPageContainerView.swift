@@ -16,7 +16,7 @@ private enum AHCurrentScrollDirection{
 
 class AHPageContainerView: UIView {
 
-    var interControllerSpacing: CGFloat = 8.0
+    var interControllerSpacing: CGFloat = 0.0
     
     var childVCs: [UIViewController]
     weak var delegate: AHCategoryContainerDelegate?
@@ -68,6 +68,8 @@ class AHPageContainerView: UIView {
                 pageScrollView?.delegate = self
             }
         }
+        pageVC.view.backgroundColor = UIColor.clear
+        self.backgroundColor = UIColor.clear
         pageVC.view.frame = CGRect(x: 0, y: 0, width: self.bounds.width, height: self.bounds.height + 37.0)
         
         pageVC.willMove(toParentViewController: self.parentVC)
@@ -234,7 +236,6 @@ extension AHPageContainerView: AHCategoryNavBarDelegate {
         let vc = childVCs[toIndex]
         pageVC.setViewControllers([vc], direction: direction, animated: true) { (_) in
             self.currentIndex = toIndex
-            print("currentIndex:\(self.currentIndex)")
         }
 
     }

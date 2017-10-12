@@ -30,13 +30,20 @@ public protocol AHCategoryContainerDelegate: class {
 
 
 open class AHCategoryView: UIView {
+    public var interControllerSpacing: CGFloat = 0.0 {
+        didSet {
+            self.containerView.interControllerSpacing = self.interControllerSpacing
+        }
+    }
+    public fileprivate(set) var navBar: AHCategoryNavBar!
+    
     fileprivate var categories: [AHCategoryItem]
     fileprivate var childVCs: [UIViewController]
     fileprivate weak var parentVC: UIViewController!
     fileprivate var barStyle: AHCategoryNavBarStyle
+    fileprivate var containerView: AHPageContainerView!
+
     
-    public fileprivate(set) var navBar: AHCategoryNavBar!
-    fileprivate(set) var containerView: AHPageContainerView!
     
     public init(frame: CGRect, categories: [AHCategoryItem], childVCs: [UIViewController], parentVC: UIViewController, barStyle: AHCategoryNavBarStyle) {
         self.categories = categories
@@ -63,7 +70,7 @@ open class AHCategoryView: UIView {
         navBar.select(at: index)
     }
     
-    public func setBadge(atIndex index: Int, numberOfBadge num: Int) {
+    public func setBadge(atIndex index: Int, badgeNumber num: Int) {
         guard index >= 0 && index <= categories.count else {
             return
         }
@@ -86,7 +93,7 @@ private extension AHCategoryView {
     
     func setupNavBar() {
         var barFrame: CGRect?
-        if barStyle.isEmbedded {
+        if barStyle.isEmbeddedToView {
             barFrame = CGRect(x: 0, y: 0, width: bounds.width, height: barStyle.height)
         }else{
             barFrame = CGRect.zero
@@ -97,8 +104,8 @@ private extension AHCategoryView {
     }
     
     func setupContainerVC() {
-        let containerY: CGFloat = barStyle.isEmbedded ? barStyle.height : 0.0
-        let containerHeight: CGFloat = barStyle.isEmbedded ? bounds.height - barStyle.height : bounds.height
+        let containerY: CGFloat = barStyle.isEmbeddedToView ? barStyle.height : 0.0
+        let containerHeight: CGFloat = barStyle.isEmbeddedToView ? bounds.height - barStyle.height : bounds.height
         let frame = CGRect(x: 0, y: containerY, width: bounds.width, height: containerHeight)
         
         containerView = AHPageContainerView(frame: frame, childVCs: childVCs, parentVC: parentVC)

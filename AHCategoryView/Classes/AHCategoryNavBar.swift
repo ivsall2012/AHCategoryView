@@ -37,7 +37,7 @@ public class AHCategoryNavBar: UIView {
     // this tag relects any changes in VC switching
     fileprivate var currentButtonTag: Int = 0
     
-    // this button keep track of which button being tapped previously
+    // this button keeps track of which button being tapped previously
     fileprivate weak var previousButton: UIButton?
     
     fileprivate lazy var buttonHeight: CGFloat = self.bounds.height
@@ -73,7 +73,7 @@ public class AHCategoryNavBar: UIView {
         super.init(frame: frame)
         self.backgroundColor = UIColor.white
         
-        if barStyle.isEmbedded && frame != .zero {
+        if barStyle.isEmbeddedToView && frame != .zero {
             setupUI()
             isSetup = true
         }
@@ -82,7 +82,7 @@ public class AHCategoryNavBar: UIView {
 
     public override var frame: CGRect {
         didSet {
-            if !barStyle.isEmbedded && frame != .zero && isSetup == false {
+            if !barStyle.isEmbeddedToView && frame != .zero && isSetup == false {
                 setupUI()
                 isSetup = true
             }
@@ -103,7 +103,7 @@ public class AHCategoryNavBar: UIView {
         let btn = buttons[index]
         categories.remove(at: index)
         categories.insert(item, at: index)
-        setup(btn, with: item)
+        setup(btn, with: item, atIndex: index)
     }
     
     public func select(at index: Int) {
@@ -186,23 +186,27 @@ public class AHCategoryNavBar: UIView {
             return
         }
         
-        if badgeInfo.numberOfBadge > 1 {
-            badgeLabel.backgroundColor = UIColor.red
-            badgeLabel.textColor = UIColor.white
-            badgeLabel.font = UIFont.systemFont(ofSize: 12.0)
-            badgeLabel.text = "\(badgeInfo.numberOfBadge)"
-            badgeLabel.sizeToFit()
-            let oldFrame = badgeLabel.frame
-            badgeLabel.frame.size = CGSize(width: oldFrame.width + 5.0, height: oldFrame.height)
-            badgeLabel.frame.origin.x = referenceFrame.maxX
-            badgeLabel.frame.origin.y = referenceFrame.origin.y - badgeLabel.frame.size.height * 0.5
-            badgeLabel.layer.cornerRadius = badgeLabel.frame.size.height * 0.5
-            badgeLabel.layer.masksToBounds = true
-            btn.addSubview(badgeLabel)
-            badgeInfo.badgeLabel = badgeLabel
-            return
-        }
+        badgeLabel.backgroundColor = UIColor.red
+        badgeLabel.textColor = UIColor.white
+        badgeLabel.font = UIFont.systemFont(ofSize: 12.0)
+        badgeLabel.text = "\(badgeInfo.numberOfBadge)"
+        badgeLabel.sizeToFit()
+        let oldFrame = badgeLabel.frame
+        badgeLabel.frame.size = CGSize(width: oldFrame.width + 5.0, height: oldFrame.height)
+        badgeLabel.frame.origin.x = referenceFrame.maxX
+        badgeLabel.frame.origin.y = referenceFrame.origin.y - badgeLabel.frame.size.height * 0.5
+        var cornerRadius = 0.0
         
+        if badgeInfo.numberOfBadge > 1 &&  badgeInfo.numberOfBadge < 10 {
+            cornerRadius = Double(badgeLabel.intrinsicContentSize.height * 0.5 - 1.0)
+            
+        }else if badgeInfo.numberOfBadge >= 10 {
+            cornerRadius = Double(badgeLabel.intrinsicContentSize.height * 0.5)
+        }
+        badgeLabel.layer.cornerRadius = CGFloat(cornerRadius)
+        badgeLabel.layer.masksToBounds = true
+        btn.addSubview(badgeLabel)
+        badgeInfo.badgeLabel = badgeLabel
         
     }
     
@@ -231,14 +235,22 @@ fileprivate extension AHCategoryNavBar {
     func setupScrollView(){
         scrollView.showsHorizontalScrollIndicator = false
         scrollView.isScrollEnabled = barStyle.isScrollabel
+        scrollView.contentInset = barStyle.contentInset
         addSubview(scrollView)
     }
     
     
-    func setup(_ btn: UIButton, with item: AHCategoryItem) {
+    func setup(_ btn: UIButton, with item: AHCategoryItem, atIndex index:Int) {
+        btn.imageView?.contentMode = .scaleAspectFill
+        btn.tag = index
+        btn.isHighlighted = false
         if let itemTitle = item.title {
             btn.setTitle(itemTitle, for: .normal)
-            btn.setTitleColor(barStyle.normalColor, for: .normal)
+            if btn.tag == 0 {
+                btn.setTitleColor(barStyle.selectedColor, for: .normal)
+            }else{
+                btn.setTitleColor(barStyle.normalColor, for: .normal)
+            }
             btn.titleLabel?.textAlignment = .center
             btn.titleLabel?.font = buttonFont
         }
@@ -256,10 +268,7 @@ fileprivate extension AHCategoryNavBar {
         for i in 0..<categories.count {
             let btn = UIButton()
             let item = categories[i]
-            setup(btn, with: item)
-            btn.imageView?.contentMode = .scaleAspectFill
-            btn.tag = i
-            btn.isHighlighted = false
+            setup(btn, with: item, atIndex: i)
             
             var x: CGFloat = 0.0
             let y: CGFloat = 0.0
@@ -268,33 +277,34 @@ fileprivate extension AHCategoryNavBar {
             let textWidth: CGFloat = btn.intrinsicContentSize.width
             
             
+            
             if barStyle.isScrollabel {
                 // scrollabel, each label has its own width according to its text
                 width = textWidth + barStyle.itemPadding * 2
                 if i > 0 {
                     let previousBtn = buttons[i - 1]
-                    x = previousBtn.frame.maxX + barStyle.interItemSpace + barStyle.offsetX
+                    x = previousBtn.frame.maxX + barStyle.interItemSpace
                 }
                 // special adjustment for the first button
                 if i == 0 {
-                    x = barStyle.interItemSpace * 0.5 + barStyle.offsetX
+                    x = barStyle.interItemSpace * 0.5
                 }
             }else{
                 if barStyle.layoutAlignment == .left {
                     width = textWidth + barStyle.itemPadding * 2
                     if i > 0 {
                         let previousBtn = buttons[i - 1]
-                        x = previousBtn.frame.maxX + barStyle.interItemSpace + barStyle.offsetX
+                        x = previousBtn.frame.maxX + barStyle.interItemSpace
                     }
                     // special adjustment for the first button
                     if i == 0 {
-                        x = barStyle.interItemSpace * 0.5 + barStyle.offsetX
+                        x = barStyle.interItemSpace * 0.5
                     }
                 }else {
                     width = self.bounds.width / CGFloat(categories.count)
                     
                     if i > 0 {
-                        x = width * CGFloat(i) + barStyle.offsetX
+                        x = width * CGFloat(i)
                     }
                 }
             }
