@@ -26,7 +26,7 @@ public struct AHCategoryNavBarStyle {
     /// Note: This attribute only works when isScrollabel = false.
     public var layoutAlignment: AHCategoryNavBarAlignment = .left
     
-    public var isScrollabel = false
+    public var isScrollable = false
     
     public var fontSize: CGFloat = 15.0
     public var selectedFontSize: CGFloat = 17.0

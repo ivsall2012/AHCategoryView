@@ -234,7 +234,7 @@ fileprivate extension AHCategoryNavBar {
     }
     func setupScrollView(){
         scrollView.showsHorizontalScrollIndicator = false
-        scrollView.isScrollEnabled = barStyle.isScrollabel
+        scrollView.isScrollEnabled = barStyle.isScrollable
         scrollView.contentInset = barStyle.contentInset
         addSubview(scrollView)
     }
@@ -278,7 +278,7 @@ fileprivate extension AHCategoryNavBar {
             
             
             
-            if barStyle.isScrollabel {
+            if barStyle.isScrollable {
                 // scrollabel, each label has its own width according to its text
                 width = textWidth + barStyle.itemPadding * 2
                 if i > 0 {
@@ -394,7 +394,7 @@ private extension AHCategoryNavBar {
         currentBtn.setTitleColor(barStyle.selectedColor, for: .normal)
         currentButtonTag = currentBtn.tag
         
-        if barStyle.isScrollabel {
+        if barStyle.isScrollable {
             scrollToCenter(currentBtn: currentBtn)
         }
         
@@ -436,7 +436,7 @@ private extension AHCategoryNavBar {
     }
     
     func scrollToCenter(currentBtn: UIButton) {
-        guard barStyle.isScrollabel else {
+        guard barStyle.isScrollable else {
             return
         }
         

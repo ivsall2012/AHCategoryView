@@ -8,7 +8,7 @@
 
 Pod::Spec.new do |s|
   s.name             = 'AHCategoryView'
-  s.version          = '1.3.0'
+  s.version          = '1.3.01'
   s.summary          = 'AHCategoryView.'
 
   s.description      = <<-DESC

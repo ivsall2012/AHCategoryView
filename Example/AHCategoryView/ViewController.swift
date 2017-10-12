@@ -12,7 +12,6 @@ import AHCategoryView
 private let ScreenSize = UIScreen.main.bounds.size
 
 class ViewController: UIViewController {
-    let categoryTitles = ["Featured", "Charts","Charts","Charts","Charts"]
     fileprivate weak var categoryView: AHCategoryView!
     var childVCs = [UIViewController]()
     
@@ -22,12 +21,6 @@ class ViewController: UIViewController {
         pinterest()
     }
 
-    
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-
-    }
 
 }
 
@@ -66,7 +59,7 @@ extension ViewController {
         style.selectedFontSize = 22.0
         style.interItemSpace = 5.0
         style.itemPadding = 8.0
-        style.isScrollabel = true
+        style.isScrollable = true
         style.layoutAlignment = .left
         style.isEmbeddedToView = true
         style.showBottomSeparator = true
@@ -77,7 +70,7 @@ extension ViewController {
         style.bgMaskViewColor = UIColor.lightGray
         
         
-        //######### 4. Setting up categoryView
+        //######### 4. Attaching categoryView to view.addSubview
         let frame = CGRect(x: 0, y: 64.0, width: ScreenSize.width, height: ScreenSize.height - 64.0)
         let categoryView = AHCategoryView(frame: frame, categories: items, childVCs: childVCs, parentVC: self, barStyle: style)
         categoryView.interControllerSpacing = 0.0
@@ -131,15 +124,16 @@ extension ViewController {
 //        style.contentInset = .zero
         style.interItemSpace = 8.0
         style.itemPadding = 8.0
-        style.isScrollabel = false
+        style.isScrollable = false
         style.layoutAlignment = .left
+        ///NOTE: If you want to embed categoryView.navBar into a navigationItem.titleView or some other view, you have to set style.isEmbeddedToView = false.
         style.isEmbeddedToView = false
         style.showBottomSeparator = false
         style.indicatorColor = UIColor(red: 244.0/255.0, green: 173.0/255.0, blue: 98.0/255.0, alpha: 1.0)
         style.normalColor = UIColor(red: 0, green: 0, blue: 0, alpha: 1.0)
         style.selectedColor = UIColor(red: 1, green: 0, blue: 0, alpha: 1.0)
         
-        //######### 4. Setting up categoryView
+        //######### 4. Attaching categoryView to navigationItem.titleView
         let frame = CGRect(x: 0, y: 64.0, width: ScreenSize.width, height: ScreenSize.height - 64.0)
         let categoryView = AHCategoryView(frame: frame, categories: items, childVCs: childVCs, parentVC: self, barStyle: style)
         self.view.addSubview(categoryView)
